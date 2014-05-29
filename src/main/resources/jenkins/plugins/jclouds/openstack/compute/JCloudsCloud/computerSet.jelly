@@ -1,0 +1,29 @@
+<j:jelly xmlns:j="jelly:core" xmlns:st="jelly:stapler"
+         xmlns:f="/lib/form">
+    <j:if test="${it.hasPermission(it.PROVISION)}">
+
+        <tr>
+            <td/>
+            <td colspan="${monitors.size()+2}">
+
+                <f:form action="${rootURL}/cloud/${it.name}/provision" method="post" name="provision">
+                    <input type="submit" class="jclouds-provision-button" value="${%Provision via JClouds} - ${it.name}"/>
+                    <select name="name">
+                        <j:forEach var="t" items="${it.templates}">
+                            <option value="${t.name}">${t.name}</option>
+                        </j:forEach>
+                    </select>
+                    <st:once>
+                        <script>
+                            Behaviour.register({
+                                ".jclouds-provision-button" : function (e) {
+                                    new YAHOO.widget.Button(e, { type: "menu", menu: e.nextSibling });
+                                }
+                            });
+                        </script>
+                    </st:once>
+                </f:form>
+            </td>
+        </tr>
+    </j:if>
+</j:jelly>

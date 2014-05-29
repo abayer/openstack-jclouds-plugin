@@ -1,0 +1,169 @@
+<j:jelly xmlns:j="jelly:core"
+         xmlns:f="/lib/form">
+  <table width="100%">
+    <f:section title="General Configuration">
+      <f:entry title="Name" field="name">
+        <f:textbox/>
+      </f:entry>
+      <f:entry title="Description" field="description">
+        <f:textarea/>
+      </f:entry>
+      <f:entry title="Labels" field="labelString">
+        <f:textbox/>
+      </f:entry>
+      <f:entry title="Number of Executors" field="numExecutors">
+        <f:textbox/>
+      </f:entry>
+    </f:section>
+    
+    <f:section title="Hardware Options">
+      <f:radioBlock inline="true" name="jclouds.useHardwareId" value="true"
+                    title="Specify Hardware ID" checked="${instance.hardwareId != ''}">
+        <f:entry title="Hardware Id" field="hardwareId">
+          <f:select />
+        </f:entry>
+        <f:validateButton title="${%Check Hardware Id}" progress="${%Checking...}" method="validateHardwareId"
+                            with="providerName,identity,credential,endPointUrl,hardwareId"/>
+      </f:radioBlock>
+      
+      <f:radioBlock inline="true" name="jclouds.useHardwareId" value="false"
+                    title="Specify RAM and Cores" checked="${instance.hardwareId == ''}">
+        <f:entry title="Min. RAM (MB)" field="ram">
+          <f:textbox default="512"/>
+        </f:entry>
+        
+        <f:entry title="Min. No.of Cores" field="cores">
+          <f:textbox default="1"/>
+        </f:entry>
+      </f:radioBlock>
+    </f:section>
+
+    <f:section title="Image/OS Options">
+      <f:radioBlock inline="true" name="jclouds.imageSelectionOption" value="imageId"
+                    title="Specify Image ID" checked="${(instance.imageId != null) &amp;&amp; !instance.imageId.isEmpty()}">
+        <f:entry title="Image Id" field="imageId">
+          <f:textbox />
+        </f:entry>
+        
+        <f:validateButton title="${%Check Image Id}" progress="${%Checking...}" method="validateImageId"
+                          with="providerName,identity,credential,endPointUrl,imageId"/>
+      </f:radioBlock>
+
+      <f:radioBlock inline="true" name="jclouds.imageSelectionOption" value="imageNameRegex"
+                    title="Specify Image Name Regex" checked="${((instance.imageId == null) || instance.imageId.isEmpty()) &amp;&amp; (instance.imageNameRegex != null) &amp;&amp; !instance.imageNameRegex.isEmpty()}">
+        <f:entry title="Image Name Regex" field="imageNameRegex">
+            <f:textbox />
+        </f:entry>
+
+        <f:validateButton title="${%Check Image Name Regex}" progress="${%Checking...}" method="validateImageNameRegex"
+                          with="providerName,identity,credential,endPointUrl,imageNameRegex"/>
+      </f:radioBlock>
+
+      <f:radioBlock inline="true" name="jclouds.imageSelectionOption" value="osFamilyAndVersion"
+                    title="Specify OS Family and Version" checked="${((instance.imageId == null) || instance.imageId.isEmpty()) &amp;&amp; ((instance.imageNameRegex == null) || instance.imageNameRegex.isEmpty())}">
+        <f:entry title="OS Family" field="osFamily">
+          <f:textbox/>
+        </f:entry>
+        
+        <f:entry title="OS Version" field="osVersion">
+          <f:textbox/>
+        </f:entry>
+      </f:radioBlock>
+    </f:section>
+
+    <f:advanced>
+      <f:section title="Location Options">
+        <f:entry title="Location Id" field="locationId">
+          <f:select />
+        </f:entry>
+        <f:validateButton title="${%Check Location Id}" progress="${%Checking...}" method="validateLocationId"
+                          with="providerName,identity,credential,endPointUrl,locationId"/>
+      </f:section>
+      <f:section title="General Options">
+        <f:entry title="Override Retention Time" field="overrideRetentionTime">
+          <f:textbox />
+        </f:entry>
+      
+        <f:entry title="Delay before spooling up (ms)" field="spoolDelayMs">
+          <f:textbox />
+        </f:entry>
+      
+        <f:entry title="Init Script" field="initScript">
+          <f:textarea />
+        </f:entry>
+      
+        <f:entry title="User Data (if supported by provider)" field="userData">
+          <f:textarea />
+        </f:entry>
+
+        <f:entry title="Jenkins User" field="jenkinsUser">
+          <f:textbox />
+        </f:entry>
+
+        <f:entry title="${%Use Pre-existing Jenkins User}"
+                 field="preExistingJenkinsUser">
+          <f:checkbox />
+        </f:entry>
+      
+        <f:entry title="Allow Sudo" field="allowSudo">
+          <f:checkbox />
+        </f:entry>
+        <f:entry title="Install Private Key" field="installPrivateKey">
+          <f:checkbox />
+        </f:entry>
+        <f:entry title="Remote FS Root" field="fsRoot">
+          <f:textbox />
+        </f:entry>
+      
+        <f:entry title="Admin Username" field="vmUser">
+          <f:textbox />
+        </f:entry>
+        <f:entry title="Admin Password" field="vmPassword">
+          <f:password />
+        </f:entry>
+      
+        <f:entry title="${%Use Pre-installed Java}" field="preInstalledJava">
+          <f:checkbox />
+        </f:entry>
+      
+        <f:entry title="Custom JVM Options" field="jvmOptions">
+          <f:textbox />
+        </f:entry>
+      
+        <f:entry title="${%Stop on Terminate}" field="stopOnTerminate">
+          <f:checkbox />
+        </f:entry>
+
+        <f:entry title="Networks" field="networks">
+          <f:textbox />
+        </f:entry>
+
+        <f:entry title="Security Groups" field="securityGroups">
+          <f:textbox />
+        </f:entry>
+      </f:section>
+      
+      <f:section title="Open Stack Options">
+        <f:entry title="Assign Floating IP" field="assignFloatingIp">
+          <f:checkbox />
+        </f:entry>
+        <f:entry title="Key Pair Name" field="keyPairName">
+          <f:textbox />
+        </f:entry>
+      </f:section>
+
+      <f:section title="CloudStack Options">
+        <f:entry title="Assign Public IP" field="assignPublicIp">
+          <f:checkbox default="true"/>
+        </f:entry>
+      </f:section>
+      
+    </f:advanced>
+    <f:entry title="">
+      <div align="right">
+        <f:repeatableDeleteButton/>
+      </div>
+    </f:entry>
+    
+  </table>
+</j:jelly>

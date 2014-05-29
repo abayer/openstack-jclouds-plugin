@@ -1,0 +1,11 @@
+work
+/target
+/bin
+.settings
+.classpath
+.project
+release.properties
+.idea
+*.iml
+**/dependency-reduced-pom.xml
+**/target
