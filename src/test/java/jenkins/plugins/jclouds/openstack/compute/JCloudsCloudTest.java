@@ -31,9 +31,9 @@ public class JCloudsCloudTest {
 		final HtmlForm configForm = page.getFormByName("config");
 		final HtmlButton buttonByCaption = configForm.getButtonByCaption("Add a new cloud");
 		HtmlPage page1 = buttonByCaption.click();
-		WebAssert.assertLinkPresentWithText(page1, "Cloud (JClouds)");
+		WebAssert.assertLinkPresentWithText(page1, "Cloud (OpenStack jclouds)");
 
-		HtmlPage page2 = page.getAnchorByText("Cloud (JClouds)").click();
+		HtmlPage page2 = page.getAnchorByText("Cloud (OpenStack jclouds)").click();
 		WebAssert.assertInputPresent(page2, "_.profile");
 		WebAssert.assertInputPresent(page2, "_.endPointUrl");
 		WebAssert.assertInputPresent(page2, "_.identity");
@@ -56,16 +56,17 @@ public class JCloudsCloudTest {
     @Test
 	public void testConfigRoundtrip() throws Exception {
 
-		JCloudsCloud original = new JCloudsCloud("aws-profile", "aws-ec2", "identity", "credential", "privateKey", "publicKey", "endPointUrl", 1, 30,
+		JCloudsCloud original = new JCloudsCloud("rackspace-profile", "rackspace-cloudservers-us",
+                "identity", "credential", "privateKey", "publicKey", "endPointUrl", 1, 30,
 				600 * 1000, 600 * 1000, null, Collections.<JCloudsSlaveTemplate> emptyList());
 
 		j.getInstance().clouds.add(original);
         j.submit(j.createWebClient().goTo("configure").getFormByName("config"));
 
-		j.assertEqualBeans(original, j.getInstance().clouds.getByName("aws-profile"),
+		j.assertEqualBeans(original, j.getInstance().clouds.getByName("rackspace-profile"),
 				"profile,providerName,identity,credential,privateKey,publicKey,endPointUrl,instanceCap,retentionTime");
 
-		j.assertEqualBeans(original, JCloudsCloud.getByName("aws-profile"),
+		j.assertEqualBeans(original, JCloudsCloud.getByName("rackspace-profile"),
 				"profile,providerName,identity,credential,privateKey,publicKey,endPointUrl,instanceCap,retentionTime");
 	}
 
